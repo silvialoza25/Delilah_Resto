@@ -1,0 +1,502 @@
+openapi: 3.0.1
+info:
+  title: Delilah Restó
+  description: Backend for an online ordering system for a restaurant putting into operation the necessary parts to set up a REST API that allows CRUD operations on a data structure.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: alejahe.sil@hotmail.es
+  license:
+    name: MIT
+    url: https://github.com/silvialozano25/DELILAH
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+tags:
+  - name: Create User
+    description: Operations about users
+  - name: Login User
+    description: Operations about users
+  - name: Create Product
+    description: Operations about Products
+  - name: Get Products
+    description: Operations about Products
+  - name: Find Products by ID
+    description: Operations about Products
+  - name: Update Products by ID
+    description: Operations about Products
+  - name: Delete Products by ID
+    description: Operations about Products
+  - name: Create Request
+    description: Operations about Requests
+  - name: Get Requests
+    description: Operations about Requests
+  - name: Find Requests by ID
+    description: Operations about Requests
+  - name: Update Requests by ID
+    description: Operations about Requests
+  - name: Delete Requests by ID
+    description: Operations about Requests
+  - name: Get Orders
+    description: Operations about Orders
+paths:
+  /users/singup:
+    post:
+      tags:
+        - Create User
+      summary: Creación y registro de usuarios
+      operationId: addUser
+      requestBody:
+        description: Datos del usuario a registrar
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Create_User"
+        required: true
+      responses:
+        200:
+          description: Gives us as an answer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Create_User"
+        400:
+          description: The email already exists
+        406:
+          description: Please fill all fields
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /users/signin:
+    post:
+      tags:
+        - Login User
+      summary: Enter the registered email and password
+      operationId: loginUser
+      requestBody:
+        description: Enter the registered email and password
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login_User"
+        required: true
+      responses:
+        200:
+          description: It returns the user access JWT
+          content:
+            application/json:
+              schema:
+                example: '"yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiSnVuaW9yIiwibGFzdG5hbWUiOiJNZWRpbmEiLCJwaG9uZSI6IjMxNzI5MjIyNzUiLCJhZGRyZXNzIjoiY2wgMSAjIDIgLSAzMCIsImVtWlsIjoianVuaW9yQGdtYWlsLmNvbSIsInBhc3MiOiIxMjM0Iiwicm9sIjoiYWRtaW4iLCJpYXQiOjE2MDQwMjkzNzJ9.Xcpmu_WqlUsr1DXQHt0y0fynDkj7wjTFzpjo78GiDS8asda"'
+        401:
+          description: Invalid password or email
+        406:
+          description: Please fill all fields
+      security:
+        - bearerAuth: []
+  /products/createProducts:
+    post:
+      tags:
+        - Create Product
+      summary: Create a new product
+      operationId: createProduct
+      requestBody:
+        description: Enter the required data to create a product
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Create_Product"
+        required: true
+      responses:
+        200:
+          description: It gives us the data of the product created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Create_Product"
+        400:
+          description: You don't have profiles of administrator to continue with this action
+        401:
+          description: User can not verify
+        403:
+          description: No Token provided
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /products/findProducts/{productId}:
+    get:
+      tags:
+        - Find Products by ID
+      summary: Find pet by ID
+      operationId: FindPoductsById
+      parameters:
+        - name: productId
+          in: path
+          description: ID of product to find
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Answer an object with the data of the searched product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Create_Product"
+        401:
+          description: User can not verify
+        403:
+          description: No Token provided
+        406:
+          description: Please fill all fields
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /products/updateProducts/{productId}:
+    put:
+      tags:
+        - Update Products by ID
+      summary: Update product by ID
+      operationId: updateProduct
+      parameters:
+        - name: productId
+          in: path
+          description: ID of product to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Updated user object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Update_Product"
+        required: true
+      responses:
+        200:
+          description: The answer is the confirmation that the product has been updated
+          content:
+            application/json:
+              schema:
+                example: "Updated product"
+        400:
+          description: You don't have profiles of administrator to continue with this action
+        401:
+          description: User can not verify
+        403:
+          description: No Token provided
+        404:
+          description: Product information could not be updated
+        406:
+          description: Please fill all fields
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /products/deletePoducts/{productId}:
+    delete:
+      tags:
+        - Delete Products by ID
+      summary: Delete a product by ID
+      operationId: deleteProduct
+      parameters:
+        - name: productId
+          in: path
+          description: Product ID to remove
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: The answer is the confirmation that the product has been removed successfully.
+          content:
+            application/json:
+              schema:
+                example: '"Product removed"'
+        400:
+          description: You don't have profiles of administrator to continue with this action
+        401:
+          description: User can not verify
+        403:
+          description: No Token provided
+        404:
+          description: the product does not exist, please check
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /products/productsList:
+    get:
+      tags:
+        - Get Products
+      summary: Get a list of registered products
+      operationId: getProductList
+      responses:
+        200:
+          description: Successful consultation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Create_Product"
+        401:
+          description: No Token provided
+        403:
+          description: User can not verify
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /request/CreateRequest:
+    post:
+      tags:
+        - Create Request
+      summary: Create an request
+      operationId: getOrderById
+      requestBody:
+        description: It is necessary to send the required data
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Create_Request"
+        required: true
+      responses:
+        200:
+          description: It brings us as a response the result of the order created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response_Create_Request"
+        401:
+          description: User can not verify
+        403:
+          description: No Token provided
+        404:
+          description: The request could not be created
+        406:
+          description: Please fill all fields
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /request/findRequest/{requestId}:
+    get:
+      tags:
+        - Find Requests by ID
+      summary: Update the status of an request
+      operationId: FindRequestById
+      parameters:
+        - name: requestId
+          in: path
+          description: ID of the request to update
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Answer an object with the data of the searched request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Create_Request"
+        401:
+          description: User can not verify
+        403:
+          description: No Token provided
+        404:
+          description: Request could not be found
+        406:
+          description: Please fill all fields
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /request/updateRequest/{requestId}:
+    put:
+      tags:
+        - Update Requests by ID
+      summary: Update the status of an request
+      operationId: updateRequest
+      parameters:
+        - name: requestId
+          in: path
+          description: ID of the request to update
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: The response is the confirmation that the request has been updated
+          content:
+            application/json:
+              schema:
+                example: "Updated request status"
+        400:
+          description: You don't have profiles of administrator to continue with this action
+        401:
+          description: User can not verify
+        403:
+          description: No Token provided
+        404:
+          description: Could not update your request.
+        406:
+          description: Please fill all fields
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /request/deleteRequest/{requestId}:
+    delete:
+      tags:
+        - Delete Requests by ID
+      summary: Delete an request by ID
+      operationId: deleteRequest
+      parameters:
+        - name: requestId
+          in: path
+          description: request ID to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Request removed successfully
+          content:
+            application/json:
+              schema:
+                example: '"Request removed"'
+        400:
+          description: You don't have profiles of administrator to continue with this action
+        401:
+          description: User can not verify
+        403:
+          description: No Token provided
+        404:
+          description: The request does not exist
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /request/requests:
+    get:
+      tags:
+        - Get Requests
+      summary: Get all orders placed
+      operationId: getRequest
+      responses:
+        200:
+          description: We are answered by an object that contains all the generated orders
+          content:
+            application/json:
+              schema:
+                type: object
+        401:
+          description: No Token provided
+        403:
+          description: User can not verify
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+  /order/orders:
+    get:
+      tags:
+        - Get Orders
+      summary: Get all the orders
+      operationId: logoutUser
+      responses:
+        200:
+          description: An object responds to us with all the orders generated
+          content:
+            application/json:
+              schema:
+                type: object
+        401:
+          description: No Token provided
+        403:
+          description: User can not verify
+        500:
+          description: Sorry, the server has presented an error. Try again later
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    Create_User:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        profile:
+          type: string
+    Login_User:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    Create_Request:
+      type: object
+      properties:
+        payment_method:
+          type: string
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: integer
+              quantity:
+                type: integer
+        userId:
+          type: integer
+    Response_Create_Request:
+      type: object
+      properties:
+        id:
+          type: integer
+        Payment_method:
+          type: string
+        userId:
+          type: integer
+        status:
+          type: integer
+        updatedAt:
+          type: string
+        createdAt:
+          type: string
+    Create_Product:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        price:
+          type: string
+        image:
+          type: string
+    Update_Product:
+      type: object
+      properties:
+        price:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
