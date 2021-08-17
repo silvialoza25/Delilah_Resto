@@ -1,7 +1,7 @@
-**Delilah Restó**(Backend)
+<h1>Delilah Restó</h1>
 
 Backend for an online ordering system for a restaurant putting into operation the necessary parts to set up a REST API that allows CRUD operations on a data structure
-
+<div align="justify">
 Starting 🚀 These instructions will allow you to get a copy of the project running on your local machine for development and testing purposes. Follow the instructions below to know how to deploy the project. Prerequisites 📋 Install and configure the following programs which will be necessary for the correct operation of the application
 
 Having a Text Editor, I recommend the use of VsCode.
@@ -29,4 +29,5 @@ Server started... Executing (default): SELECT 1+1 AS result Executing (default):
 
 
 Running the tests ⚙️ To learn more about running tests, you could refer to the file spec.yaml. You can also find a file called DelilahResto.postman_collection.json located inside the Postman folder, which you can import into your Postman in order to facilitate testing of the different EndPoints of our API
+  </div>
 
